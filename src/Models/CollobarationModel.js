@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 
 
 
-const collobarationSchema = mongoose.Schema({
+const collaborationSchema = mongoose.Schema({
     task: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Task",
@@ -13,7 +13,7 @@ const collobarationSchema = mongoose.Schema({
         ref: "User",
         required: true
     },
-    collobuser: {
+    collabuser: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "User",
         required: true
@@ -27,5 +27,5 @@ const collobarationSchema = mongoose.Schema({
 
 
 
-const Collobaration = mongoose.model("Collobaration", collobarationSchema);
-export default Collobaration;
+const Collaboration = mongoose.model("Collaboration ", collaborationSchema);
+export default Collaboration

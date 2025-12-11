@@ -1,4 +1,4 @@
-import Collobaration from "../Models/CollobarationModel.js";
+import Collaboration from "../Models/CollaborationModel.js";
 
 
 
@@ -16,23 +16,23 @@ export const addCollobarator = async (req, res) => {
             });
         }
 
-        const existingCollobaration = await Collobaration.findOne({ task, collobuser });
+        const existingCollaboration = await Collaboration.findOne({ task, collobuser });
 
-        if (existingCollobaration) {
+        if (existingCollaboration) {
             return res.status(400).json({
                 success: false,
                 message: "Collobarator already exists"
             });
         }
 
-        const newCollobaration = new Collobaration({ task, collobuser, control, user });
-        const collobaration = new Collobaration(newCollobaration);
-        await collobaration.save();
+        const newCollaboration = new Collaboration({ task, collobuser, control, user });
+        const Collaboration = new Collaboration(newCollaboration);
+        await Collaboration.save();
 
         res.status(201).json({
             success: true,
             message: "Collobarator Added Successfully",
-            collobaration
+            Collaboration
         });
 
     } catch (error) {
@@ -45,18 +45,18 @@ export const addCollobarator = async (req, res) => {
 };
 
 
-export const getCollobarations = async (req, res) => {
+export const getCollaborations = async (req, res) => {
     try {
         console.log("Entered Into Get All Collobarators")
 
-        const collobarations = await Collobaration.find().populate("task").populate("collobuser").populate("user");
-        const count = await Collobaration.countDocuments()
+        const Collaborations = await Collaboration.find().populate("task").populate("collobuser").populate("user");
+        const count = await Collaboration.countDocuments()
 
         res.status(200).json({
             success: true,
             message: "Collobarators Fetched Successfully",
             count,
-            collobarations
+            Collaborations
         });
 
     } catch (error) {
@@ -69,9 +69,9 @@ export const getCollobarations = async (req, res) => {
 };
 
 
-export const deleteCollobaration = async (req, res) => {
+export const deleteCollaboration = async (req, res) => {
     try {
-        console.log("Entered Into Delete Collobaration")
+        console.log("Entered Into Delete Collaboration")
         const { id } = req.params
 
         if (!id) {
@@ -81,12 +81,26 @@ export const deleteCollobaration = async (req, res) => {
             })
         }
 
-        await Collobaration.findByIdAndDelete(id)
+        await Collaboration.findByIdAndDelete(id)
 
         res.status(200).json({
             success: true,
             message: "Collobarator Deleted Successfully"
         });
+
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({
+            success: false,
+            message: "Internal Server Error"
+        });
+    }
+}
+
+
+export const updateCollabaratorControl = async (req, res) => {
+    try {
+        console.log("Entered Into Update Colla")
 
     } catch (error) {
         console.log(error);
