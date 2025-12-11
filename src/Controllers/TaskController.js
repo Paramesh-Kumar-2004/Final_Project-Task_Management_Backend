@@ -49,6 +49,29 @@ export const getAllTasks = async (req, res) => {
 };
 
 
+export const getSingleTask = async (req, res) => {
+    try {
+
+        console.log("Entered Into Get Single Task")
+        const { id } = req.params
+
+        const task = await Task.findById(id)
+
+        res.status(200).json({
+            message: "Task Fetched Successfully",
+            task
+        })
+
+    } catch (error) {
+        console.log(error)
+        return res.status(500).json({
+            success: false,
+            message: "Internal Sever Error"
+        })
+    }
+}
+
+
 export const updateTask = async (req, res) => {
     try {
         console.log("Entered Update Task")
