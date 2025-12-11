@@ -1,7 +1,7 @@
 import express from "express"
 import { Authentication } from "../Middlewares/AuthMiddleware.js"
 import {
-    addCollobarator,
+    addCollaborator,
     deleteCollaboration,
     getCollaborations
 } from "../Controllers/CollaborationController.js";
@@ -10,7 +10,7 @@ import {
 const router = express.Router()
 
 
-router.post("/addcollaboration", Authentication, addCollobarator)
+router.post("/addcollaboration", Authentication, addCollaborator)
 router.get("/getcollaborations", Authentication, getCollaborations)
 router.delete("/deletecollaboration/:id", Authentication, deleteCollaboration)
 

@@ -2,14 +2,14 @@ import Collaboration from "../Models/CollaborationModel.js";
 
 
 
-export const addCollobarator = async (req, res) => {
+export const addCollaborator = async (req, res) => {
     try {
         console.log("Entered Into Add Collobarator")
 
-        const { task, control, collobuser } = req.body;
+        const { task, control, collabuser } = req.body;
         const user = req.user._id
 
-        if (!task || !collobuser) {
+        if (!task || !collabuser) {
             return res.status(400).json({
                 success: false,
                 message: "Task and collobuser are required"
@@ -98,9 +98,18 @@ export const deleteCollaboration = async (req, res) => {
 }
 
 
-export const updateCollabaratorControl = async (req, res) => {
+export const updateCollaboratorControl = async (req, res) => {
     try {
         console.log("Entered Into Update Colla")
+
+        const { control } = req.body
+        const { id } = req.params
+
+        const updateCollaboratorControl = await Collaboration.findByIdAndUpdate(
+            id,
+            control,
+            { new: true }
+        );
 
     } catch (error) {
         console.log(error);

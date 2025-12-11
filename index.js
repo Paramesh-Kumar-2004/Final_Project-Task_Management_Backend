@@ -6,7 +6,7 @@ import { ConnectDB } from "./src/DbConfig/ConnectDB.js"
 
 import AuthRoutes from "./src/Routes/UserRoutes.js"
 import TaskRoutes from "./src/Routes/TaskRoutes.js"
-import CollobarationRoutes from "./src/Routes/CollobarationRoutes.js"
+import CollobarationRoutes from "./src/Routes/CollaborationRoutes.js"
 
 
 const app = express()
