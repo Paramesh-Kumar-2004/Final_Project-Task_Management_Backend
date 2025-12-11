@@ -12,11 +12,11 @@ export const addCollaborator = async (req, res) => {
         if (!task || !collabuser) {
             return res.status(400).json({
                 success: false,
-                message: "Task and collobuser are required"
+                message: "Task and collabuser are required"
             });
         }
 
-        const existingCollaboration = await Collaboration.findOne({ task, collobuser });
+        const existingCollaboration = await Collaboration.findOne({ task, collabuser });
 
         if (existingCollaboration) {
             return res.status(400).json({
@@ -25,9 +25,8 @@ export const addCollaborator = async (req, res) => {
             });
         }
 
-        const newCollaboration = new Collaboration({ task, collobuser, control, user });
-        const Collaboration = new Collaboration(newCollaboration);
-        await Collaboration.save();
+        const newCollaboration = new Collaboration({ task, collabuser, control, user });
+        await newCollaboration.save();
 
         res.status(201).json({
             success: true,
@@ -49,7 +48,7 @@ export const getCollaborations = async (req, res) => {
     try {
         console.log("Entered Into Get All Collobarators")
 
-        const Collaborations = await Collaboration.find().populate("task").populate("collobuser").populate("user");
+        const Collaborations = await Collaboration.find().populate("task").populate("collabuser").populate("user");
         const count = await Collaboration.countDocuments()
 
         res.status(200).json({
@@ -105,11 +104,33 @@ export const updateCollaboratorControl = async (req, res) => {
         const { control } = req.body
         const { id } = req.params
 
+        if (!control) {
+            return res.status(400).json({
+                success: false,
+                message: "Control is required"
+            })
+        }
+
+        const collaboration = await Collaboration.findById(id)
+
+        if (!collaboration) {
+            return res.status(404).json({
+                success: false,
+                message: "Collaboration Not Found"
+            })
+        }
+
         const updateCollaboratorControl = await Collaboration.findByIdAndUpdate(
             id,
-            control,
+            { control: control },
             { new: true }
         );
+
+        res.status(200).json({
+            success: true,
+            message: "Collobarator Updated Successfully",
+            updateCollaboratorControl
+        });
 
     } catch (error) {
         console.log(error);
