@@ -58,6 +58,14 @@ export const getSingleTask = async (req, res) => {
         const { id } = req.params
 
         const task = await Task.findById(id)
+
+        if (!task) {
+            return res.status(404).json({
+                success: false,
+                message: "Task Not Found"
+            })
+        }
+
         const collaborators = await Collaboration.find({ task: id }).populate("collabuser").populate("user")
 
         res.status(200).json({
