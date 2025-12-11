@@ -39,3 +39,24 @@ export const addCollobarator = async (req, res) => {
         res.status(500).json({ message: "Internal Server Error" });
     }
 };
+
+
+export const getAllCollobarators = async (req, res) => {
+    try {
+        console.log("Entered Into Get All Collobarators")
+
+        const collobarations = await Collobaration.find().populate("task").populate("collobuser").populate("user");
+        const count = await Collobaration.countDocuments()
+
+        res.status(200).json({
+            message: "Collobarators Fetched Successfully",
+            count,
+            collobarations
+        });
+
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ message: "Internal Server Error" });
+    }
+};
+  
