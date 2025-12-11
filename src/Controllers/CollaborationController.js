@@ -1,4 +1,5 @@
 import Collaboration from "../Models/CollaborationModel.js";
+import Task from "../Models/TaskModel.js"
 
 
 
@@ -13,6 +14,14 @@ export const addCollaborator = async (req, res) => {
             return res.status(400).json({
                 success: false,
                 message: "Task and collabuser are required"
+            });
+        }
+
+        const existsTask = await Task.findById(task)
+        if (!existsTask) {
+            return res.status(404).json({
+                success: false,
+                message: "Task Not Found"
             });
         }
 

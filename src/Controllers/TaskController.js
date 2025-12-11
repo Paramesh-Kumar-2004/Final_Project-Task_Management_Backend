@@ -1,3 +1,4 @@
+import Collaboration from "../Models/CollaborationModel.js";
 import Task from "../Models/TaskModel.js";
 import User from "../Models/UserModel.js";
 
@@ -37,6 +38,7 @@ export const getAllTasks = async (req, res) => {
         const count = await Task.countDocuments()
 
         res.status(200).json({
+            success: true,
             message: "Tasks fetched successfully",
             count,
             tasks
@@ -56,10 +58,12 @@ export const getSingleTask = async (req, res) => {
         const { id } = req.params
 
         const task = await Task.findById(id)
+        const collaborators = await Collaboration.find({ task: id }).populate("collabuser")
 
         res.status(200).json({
             message: "Task Fetched Successfully",
-            task
+            task,
+            collaborators
         })
 
     } catch (error) {
