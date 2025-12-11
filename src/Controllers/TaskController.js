@@ -58,7 +58,7 @@ export const getSingleTask = async (req, res) => {
         const { id } = req.params
 
         const task = await Task.findById(id)
-        const collaborators = await Collaboration.find({ task: id }).populate("collabuser")
+        const collaborators = await Collaboration.find({ task: id }).populate("collabuser").populate("user")
 
         res.status(200).json({
             message: "Task Fetched Successfully",
