@@ -30,18 +30,22 @@ export const addCollobarator = async (req, res) => {
         await collobaration.save();
 
         res.status(201).json({
+            success: true,
             message: "Collobarator Added Successfully",
             collobaration
         });
 
     } catch (error) {
         console.log(error);
-        res.status(500).json({ message: "Internal Server Error" });
+        res.status(500).json({
+            success: false,
+            message: "Internal Server Error"
+        });
     }
 };
 
 
-export const getAllCollobarators = async (req, res) => {
+export const getCollobarations = async (req, res) => {
     try {
         console.log("Entered Into Get All Collobarators")
 
@@ -49,6 +53,7 @@ export const getAllCollobarators = async (req, res) => {
         const count = await Collobaration.countDocuments()
 
         res.status(200).json({
+            success: true,
             message: "Collobarators Fetched Successfully",
             count,
             collobarations
@@ -56,7 +61,38 @@ export const getAllCollobarators = async (req, res) => {
 
     } catch (error) {
         console.log(error);
-        res.status(500).json({ message: "Internal Server Error" });
+        res.status(500).json({
+            success: false,
+            message: "Internal Server Error"
+        });
     }
 };
-  
+
+
+export const deleteCollobaration = async (req, res) => {
+    try {
+        console.log("Entered Into Delete Collobaration")
+        const { id } = req.params
+
+        if (!id) {
+            return res.status(400).json({
+                success: false,
+                message: "Id is required"
+            })
+        }
+
+        await Collobaration.findByIdAndDelete(id)
+
+        res.status(200).json({
+            success: true,
+            message: "Collobarator Deleted Successfully"
+        });
+
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({
+            success: false,
+            message: "Internal Server Error"
+        });
+    }
+}
