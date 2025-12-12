@@ -32,3 +32,28 @@ export const createComment = async (req, res) => {
         });
     }
 }
+
+
+
+export const getComments = async (req, res) => {
+    try {
+        console.log("Entered Into Get Comments")
+
+        const comments = await Comments.find()
+        const count = await Comments.countDocuments()
+
+        res.status(200).json({
+            success: true,
+            message: "Comments Fetched Successfully",
+            count,
+            comments
+        })
+
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({
+            success: false,
+            message: "Internal Server Error"
+        });
+    }
+}
