@@ -1,9 +1,10 @@
 import express from "express"
-import { Authentication } from "../Middlewares/AuthMiddleware"
+import { Authentication } from "../Middlewares/AuthMiddleware.js"
 import {
     createComment,
     getComments
-} from "../Controllers/CommentsController"
+} from "../Controllers/CommentsController.js"
+
 
 const router = express.Router()
 
