@@ -17,7 +17,8 @@ const taskSchema = mongoose.Schema({
     },
     category: {
         type: String,
-        enum: ["work", "personal", "prjects"]
+        enum: ["work", "personal", "prjects"],
+        default: "personal"
     },
     status: {
         type: String,

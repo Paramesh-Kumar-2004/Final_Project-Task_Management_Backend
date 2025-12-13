@@ -11,6 +11,7 @@ export const createTask = async (req, res) => {
         const newTask = new Task({
             title,
             description,
+            priority,
             user: req.user._id
         });
 
