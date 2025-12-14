@@ -35,7 +35,7 @@ export const getAllTasks = async (req, res) => {
 
         console.log("Entered Into Get Tasks")
 
-        const tasks = await Task.find().populate("user");
+        const tasks = await Task.find({ user: req.user._id }).populate("user");
         const count = await Task.countDocuments()
 
         res.status(200).json({
