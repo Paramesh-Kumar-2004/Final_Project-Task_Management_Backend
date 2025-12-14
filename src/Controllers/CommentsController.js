@@ -40,14 +40,37 @@ export const getComments = async (req, res) => {
     try {
         console.log("Entered Into Get Comments")
 
-        const comments = await Comments.find()
-        const count = await Comments.countDocuments()
+        const { id } = req.params
+
+        const comments = await Comments.find({ task: id }).populate("user")
+        const count = await Comments.countDocuments({ task: id })
 
         res.status(200).json({
             success: true,
             message: "Comments Fetched Successfully",
             count,
             comments
+        })
+
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({
+            success: false,
+            message: "Internal Server Error"
+        });
+    }
+}
+
+
+export const deleteComment = async (req, res) => {
+    try {
+        console.log("Entered Into Delete Comment")
+        const { id } = req.params
+        await Comments.findByIdAndDelete(id)
+
+        res.status(200).json({
+            success: true,
+            message: "Comment Deleted Successfully"
         })
 
     } catch (error) {

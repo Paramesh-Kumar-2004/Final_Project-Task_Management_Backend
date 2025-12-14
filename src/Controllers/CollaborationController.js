@@ -26,7 +26,7 @@ export const addCollaborator = async (req, res) => {
             });
         }
 
-        const existsCollabUser = await User.find({ _id: collabuser })
+        const existsCollabUser = await User.findById(collabuser)
         if (!existsCollabUser) {
             return res.status(404).json({
                 success: false,
