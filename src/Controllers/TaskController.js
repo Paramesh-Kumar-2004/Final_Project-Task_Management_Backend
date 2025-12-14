@@ -58,7 +58,7 @@ export const getSingleTask = async (req, res) => {
         console.log("Entered Into Get Single Task")
         const { id } = req.params
 
-        const task = await Task.find({ _id: id })
+        const task = await Task.find({ _id: id }).populate("user")
 
         if (!task) {
             return res.status(404).json({
@@ -67,7 +67,7 @@ export const getSingleTask = async (req, res) => {
             })
         }
 
-        const collaborators = await Collaboration.find({ task: id }).populate("collabuser").populate("user")
+        const collaborators = await Collaboration.find({ task: id }).populate("collabuser")
 
         res.status(200).json({
             message: "Task Details Fetched Successfully",
