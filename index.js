@@ -15,6 +15,7 @@ dotenv.config()
 
 
 // Middlewares
+app.use("/public", express.static("public"))
 app.use(cors({
     origin: "http://localhost:5173",
     credentials: true

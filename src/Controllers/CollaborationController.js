@@ -79,7 +79,7 @@ export const getCollaborations = async (req, res) => {
 
         const Collaborations = await Collaboration.find({user}).populate("task").populate("collabuser").populate("user");
         const count = await Collaboration.countDocuments()
-
+    
         res.status(200).json({
             success: true,
             message: "Collobarators Fetched Successfully",

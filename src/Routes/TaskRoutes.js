@@ -7,13 +7,14 @@ import {
     updateTask,
 } from "../Controllers/TaskController.js"
 import { Authentication } from "../Middlewares/AuthMiddleware.js"
+import upload from "../Middlewares/MulterMiddleware.js"
 
 const router = express.Router()
 
 
 router.get("/gettasks", Authentication, getAllTasks)
 router.get("/getsingletask/:id", Authentication, getSingleTask)
-router.post("/createtask", Authentication, createTask)
+router.post("/createtask", Authentication, upload.single("file"), createTask)
 router.put("/updatetask/:id", Authentication, updateTask)
 router.delete("/deletetask/:id", Authentication, deleteTask)
 
