@@ -89,7 +89,6 @@ export const updateTask = async (req, res) => {
     try {
         console.log("Entered Update Task")
 
-
         const { id } = req.params;
         const { taskData } = req.body;
 
@@ -103,7 +102,6 @@ export const updateTask = async (req, res) => {
             message: "Task Updated Successfully",
             updateTask
         })
-
 
     } catch (error) {
         console.log(error)
