@@ -15,6 +15,9 @@ const taskSchema = mongoose.Schema({
         ref: "User",
         required: true
     },
+    fileUrl: {
+        type: String,
+    },
     category: {
         type: String,
         enum: ["work", "personal", "prjects"],

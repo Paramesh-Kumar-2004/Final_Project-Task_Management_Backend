@@ -8,19 +8,25 @@ export const createTask = async (req, res) => {
     try {
 
         const { title, description, priority } = req.body;
+
+        let fileUrl = null
+        if (req.file) {
+            fileUrl = `${req.protocol}://${req.get("host")}/${req.file.path.replace(/\\/g, "/")}`;
+        }
+
         const newTask = new Task({
             title,
             description,
             priority,
+            fileUrl,
             user: req.user._id
         });
-
         const task = new Task(newTask);
         await task.save();
 
         res.status(201).json({
             message: "Task created successfully",
-            task
+            // task
         });
 
     } catch (error) {
