@@ -8,17 +8,27 @@ export const addCollaborator = async (req, res) => {
     try {
         console.log("Entered Into Add Collobarator")
 
-        const { task, control, collabuser } = req.body;
+        const { task, control, email } = req.body;
         const user = req.user._id
 
-        if (!task || !collabuser) {
+        const existscollabuser = await User.findOne({ email })
+        if (!existscollabuser) {
+            return res.status(400).json({
+                success: false,
+                message: `User Not Found For This Email : ${email}`
+            });
+        }
+
+        const collabuser = existscollabuser._id
+
+        if (!task || !email) {
             return res.status(400).json({
                 success: false,
                 message: "Task and collabuser are required"
             });
         }
 
-        const existsTask = await Task.findById(task)
+        const existsTask = await Task.findById({ _id: task })
         if (!existsTask) {
             return res.status(404).json({
                 success: false,
@@ -65,8 +75,9 @@ export const addCollaborator = async (req, res) => {
 export const getCollaborations = async (req, res) => {
     try {
         console.log("Entered Into Get All Collobarators")
+        const user = req.user._id
 
-        const Collaborations = await Collaboration.find().populate("task").populate("collabuser").populate("user");
+        const Collaborations = await Collaboration.find({user}).populate("task").populate("collabuser").populate("user");
         const count = await Collaboration.countDocuments()
 
         res.status(200).json({

@@ -89,12 +89,13 @@ export const updateTask = async (req, res) => {
     try {
         console.log("Entered Update Task")
 
+
         const { id } = req.params;
-        const data = req.body;
+        const { taskData } = req.body;
 
         const updateTask = await Task.findByIdAndUpdate(
             id,
-            { $set: data },
+            { $set: taskData },
             { new: true }
         )
 
