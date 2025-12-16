@@ -74,7 +74,7 @@ export const getSingleTask = async (req, res) => {
         console.log("Entered Into Get Single Task")
         const { id } = req.params
 
-        const task = await Task.find({ _id: id }).populate("createdBy").populate("sharedWith")
+        const task = await Task.findById({ _id: id }).populate("createdBy").populate("sharedWith.user")
 
         if (!task) {
             return res.status(404).json({
