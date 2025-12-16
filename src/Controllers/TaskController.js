@@ -161,9 +161,8 @@ export const shareTask = async (req, res) => {
             });
         }
 
-        console.log(userId, permission)
-        // task.sharedWith.push({ user: userId, permission });
-        // await task.save();
+        task.sharedWith.push({ user: userId, permission });
+        await task.save();
 
         res.status(200).json({
             success: true,
