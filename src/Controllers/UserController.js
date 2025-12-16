@@ -98,7 +98,6 @@ export const LoginUser = async (req, res) => {
 }
 
 
-
 export const GetUserDetails = async (req, res) => {
     try {
 
@@ -207,6 +206,26 @@ export const ResetPassword = async (req, res) => {
 
         res.status(200).json({
             message: "Password Reset Successfully"
+        })
+
+    } catch (error) {
+        console.log(error)
+        res.status(500).json({
+            message: "Intenal Server Error"
+        })
+    }
+}
+
+
+export const getUsers = async (req, res) => {
+    try {
+        console.log("Entered Into Get User For (Option)")
+        const users = await User.find().select("_id email")
+
+        res.status(200).json({
+            success: true,
+            message: "User Fetched Successfully",
+            users
         })
 
     } catch (error) {
