@@ -131,12 +131,25 @@ export const shareTask = async (req, res) => {
         console.log("Entered Into Share Task")
 
         const { userId, permission } = req.body;
-        const task = await Task.findById(req.params.taskid);
+        const { taskid } = req.params
+        const task = await Task.findById(taskid);
 
         if (!task) {
             return res.status(404).json({
                 success: false,
                 message: "Task not found"
+            });
+        }
+
+        const existingShare = await Task.findOne({
+            _id: taskid,
+            'sharedWith.user': userId
+        });
+
+        if (existingShare) {
+            return res.status(400).json({
+                success: false,
+                message: "Task already shared with this user"
             });
         }
 
@@ -150,9 +163,18 @@ export const shareTask = async (req, res) => {
         task.sharedWith.push({ user: userId, permission });
         await task.save();
 
-        res.status(200).json({ success: true, task });
+        res.status(200).json({
+            success: true,
+            message: "Shared Task Completed",
+            task
+        });
+
     } catch (error) {
-        res.status(500).json({ success: false, message: error.message });
+        console.log(error)
+        res.status(500).json({
+            success: false,
+            message: "Internal Server Error"
+        });
     }
 };
 
