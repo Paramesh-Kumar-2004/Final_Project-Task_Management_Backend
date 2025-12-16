@@ -1,4 +1,3 @@
-import Collaboration from "../Models/CollaborationModel.js";
 import Task from "../Models/TaskModel.js";
 import User from "../Models/UserModel.js";
 
@@ -8,7 +7,6 @@ export const createTask = async (req, res) => {
     try {
 
         const { title, description, priority, category, deadline, assignedTo } = req.body;
-        const createdBy = req.user._id;
 
         let fileUrl = null
         if (req.file) {
@@ -19,15 +17,18 @@ export const createTask = async (req, res) => {
             title,
             description,
             priority,
+            category,
+            deadline,
+            assignedTo,
             fileUrl,
-            user: req.user._id
+            createdBy: req.user._id
         });
         const task = new Task(newTask);
         await task.save();
 
         res.status(201).json({
+            success: true,
             message: "Task created successfully",
-            // task
         });
 
     } catch (error) {
@@ -42,13 +43,21 @@ export const getAllTasks = async (req, res) => {
 
         console.log("Entered Into Get Tasks")
 
-        const tasks = await Task.find({ user: req.user._id }).populate("user");
-        const count = await Task.countDocuments()
+        const tasks = await Task.find({
+            $or: [
+                { createdBy: req.user._id },
+                { assignedTo: req.user._id },
+                { "sharedWith.user": req.user._id }
+            ]
+        })
+            .populate("createdBy", "name email")
+            .populate("assignedTo", "name email")
+            .populate("sharedWith.user", "name email")
+            .sort({ deadline: 1 });
 
         res.status(200).json({
             success: true,
             message: "Tasks fetched successfully",
-            count,
             tasks
         });
 
@@ -65,7 +74,7 @@ export const getSingleTask = async (req, res) => {
         console.log("Entered Into Get Single Task")
         const { id } = req.params
 
-        const task = await Task.find({ _id: id }).populate("user")
+        const task = await Task.find({ _id: id }).populate("createdBy").populate("sharedWith")
 
         if (!task) {
             return res.status(404).json({
@@ -74,12 +83,9 @@ export const getSingleTask = async (req, res) => {
             })
         }
 
-        const collaborators = await Collaboration.find({ task: id }).populate("collabuser")
-
         res.status(200).json({
             message: "Task Details Fetched Successfully",
             task,
-            collaborators
         })
 
     } catch (error) {
