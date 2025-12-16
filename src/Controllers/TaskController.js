@@ -7,7 +7,8 @@ import User from "../Models/UserModel.js";
 export const createTask = async (req, res) => {
     try {
 
-        const { title, description, priority } = req.body;
+        const { title, description, priority, category, deadline, assignedTo } = req.body;
+        const createdBy = req.user._id;
 
         let fileUrl = null
         if (req.file) {
@@ -117,6 +118,37 @@ export const updateTask = async (req, res) => {
         })
     }
 }
+
+
+export const shareTask = async (req, res) => {
+    try {
+        console.log("Entered Into Share Task")
+
+        const { userId, permission } = req.body;
+        const task = await Task.findById(req.params.taskid);
+
+        if (!task) {
+            return res.status(404).json({
+                success: false,
+                message: "Task not found"
+            });
+        }
+
+        if (!task.createdBy.equals(req.user._id)) {
+            return res.status(403).json({
+                success: false,
+                message: "Only creator can share this task"
+            });
+        }
+
+        task.sharedWith.push({ user: userId, permission });
+        await task.save();
+
+        res.status(200).json({ success: true, task });
+    } catch (error) {
+        res.status(500).json({ success: false, message: error.message });
+    }
+};
 
 
 export const deleteTask = async (req, res) => {

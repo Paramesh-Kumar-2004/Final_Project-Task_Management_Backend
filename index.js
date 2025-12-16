@@ -6,7 +6,6 @@ import { ConnectDB } from "./src/DbConfig/ConnectDB.js"
 
 import AuthRoutes from "./src/Routes/UserRoutes.js"
 import TaskRoutes from "./src/Routes/TaskRoutes.js"
-import CollobarationRoutes from "./src/Routes/CollaborationRoutes.js"
 import CommentsRoutes from "./src/Routes/CommentsRoutes.js"
 
 
@@ -29,7 +28,6 @@ ConnectDB()
 // APIs / Routes
 app.use("/api/v1/auth", AuthRoutes)
 app.use("/api/v1/task", TaskRoutes)
-app.use("/api/v1/collobaration", CollobarationRoutes)
 app.use("/api/v1/comment", CommentsRoutes)
 
 
