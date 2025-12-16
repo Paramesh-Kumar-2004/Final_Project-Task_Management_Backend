@@ -26,6 +26,5 @@ const collaborationSchema = mongoose.Schema({
 }, { timestamps: true })
 
 
-
 const Collaboration = mongoose.model("Collaboration ", collaborationSchema);
 export default Collaboration

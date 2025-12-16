@@ -10,7 +10,8 @@ export const Authentication = async (req, res, next) => {
 
         if (!token) {
             return res.status(404).json({
-                message: "Token Is Not Available"
+                success:false,
+                message: "Login And Try Again"
             })
         }
 
