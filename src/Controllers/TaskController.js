@@ -52,6 +52,35 @@ export const getAllTasks = async (req, res) => {
         })
             .populate("createdBy", "name email")
             .populate("assignedTo", "name email")
+            // .populate("sharedWith.user", "name email")
+            .sort({ deadline: 1 });
+
+        res.status(200).json({
+            success: true,
+            message: "Tasks fetched successfully",
+            tasks
+        });
+
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ message: "Internal Server Error" });
+    }
+};
+
+
+export const getSharedTasks = async (req, res) => {
+    try {
+
+        console.log("Entered Into Get Tasks")
+
+        const tasks = await Task.find({
+            $or: [
+                { assignedTo: req.user._id },
+                { "sharedWith.user": req.user._id }
+            ]
+        })
+            .populate("createdBy", "name email")
+            .populate("assignedTo", "name email")
             .populate("sharedWith.user", "name email")
             .sort({ deadline: 1 });
 
