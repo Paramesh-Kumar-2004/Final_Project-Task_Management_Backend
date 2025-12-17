@@ -46,8 +46,6 @@ export const getAllTasks = async (req, res) => {
         const tasks = await Task.find({
             $or: [
                 { createdBy: req.user._id },
-                { assignedTo: req.user._id },
-                { "sharedWith.user": req.user._id }
             ]
         })
             .populate("createdBy", "name email")
@@ -191,9 +189,9 @@ export const getSharedTasks = async (req, res) => {
                 { "sharedWith.user": req.user._id }
             ]
         })
-            .populate("createdBy", "name email")
-            .populate("assignedTo", "name email")
-            .populate("sharedWith.user", "name email")
+            .populate("createdBy", "userName email")
+            .populate("assignedTo", "userName email")
+            .populate("sharedWith.user", "userName email")
             .sort({ deadline: 1 });
 
         res.status(200).json({
