@@ -82,11 +82,8 @@ export const LoginUser = async (req, res) => {
                 .json({
                     message: "User Login Successfully",
                     isAuth: true,
-                    email: user.email,
-                    role: user.role,
                     token,
-                    userId: user._id,
-                    userName: user.userName
+                    user
                 })
         }
 
