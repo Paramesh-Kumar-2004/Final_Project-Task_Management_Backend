@@ -6,7 +6,7 @@ import User from "../Models/UserModel.js";
 export const createTask = async (req, res) => {
     try {
 
-        const { title, description, priority, category, deadline, assignedTo } = req.body;
+        const { title, description, category, priority, deadline, assignedTo } = req.body;
 
         let fileUrl = null
         if (req.file) {
