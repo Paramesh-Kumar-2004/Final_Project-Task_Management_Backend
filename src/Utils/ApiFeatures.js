@@ -4,10 +4,9 @@ class APIFeatures {
         this.queryString = queryString;
     }
 
-
     search(fields = []) {
-        if (this.queryString.search && fields.length > 0) {
-            this.pipeline.push({
+        if (this.queryString.search && fields.length) {
+            this.pipeline.unshift({
                 $match: {
                     $or: fields.map(field => ({
                         [field]: {
@@ -23,17 +22,17 @@ class APIFeatures {
 
     filter() {
         const queryObj = { ...this.queryString };
-        ["page", "limit", "search"].forEach(el => delete queryObj[el]);
+        ["search", "page", "limit"].forEach(el => delete queryObj[el]);
 
-        if (Object.keys(queryObj).length > 0) {
-            this.pipeline.push({
+        if (Object.keys(queryObj).length) {
+            this.pipeline.unshift({
                 $match: queryObj
             });
         }
         return this;
     }
 
-    paginate(defaultLimit = 2) {
+    paginate(defaultLimit = 5) {
         const page = Number(this.queryString.page) || 1;
         const limit = Number(this.queryString.limit) || defaultLimit;
         const skip = (page - 1) * limit;
@@ -46,5 +45,6 @@ class APIFeatures {
         return this;
     }
 }
+
 
 export default APIFeatures;
