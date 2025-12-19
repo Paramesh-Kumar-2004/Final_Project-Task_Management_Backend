@@ -321,7 +321,6 @@ export const getDashboardReport = async (req, res) => {
 
         const report = await Task.aggregate([
             {
-                // USER INVOLVEMENT MATCH
                 $match: {
                     $or: [
                         { createdBy: userId },
@@ -331,7 +330,6 @@ export const getDashboardReport = async (req, res) => {
                 }
             },
             {
-                // REMOVE DUPLICATES
                 $group: {
                     _id: "$_id",
                     status: { $first: "$status" },
