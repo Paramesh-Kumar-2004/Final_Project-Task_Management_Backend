@@ -3,6 +3,7 @@ import {
     createTask,
     deleteTask,
     getAllTasks,
+    getDashboardReport,
     getSharedTasks,
     getSingleTask,
     shareTask,
@@ -21,6 +22,7 @@ router.post("/createtask", Authentication, upload.single("file"), createTask)
 router.put("/updatetask/:id", Authentication, updateTask)
 router.delete("/deletetask/:id", Authentication, deleteTask)
 router.put("/sharetask/:taskid", Authentication, shareTask)
+router.get("/dashboard/getreport", Authentication, getDashboardReport)
 
 
 export default router

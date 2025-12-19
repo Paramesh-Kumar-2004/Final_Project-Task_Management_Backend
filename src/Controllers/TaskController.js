@@ -116,16 +116,22 @@ export const getAllTasks = async (req, res) => {
             }
         ];
 
+        const count = await Task.find({
+            $or: [
+                { createdBy: req.user._id },
+            ]
+        }).countDocuments();
         const features = new APIFeatures(pipeline, req.query)
             .search(["title", "description"])
             .filter()
-            .paginate(10);
+            .paginate(count / 2);
 
         const tasks = await Task.aggregate(features.pipeline);
 
         res.status(200).json({
             success: true,
             message: "Tasks fetched successfully",
+            count,
             tasks
         });
 
@@ -297,3 +303,85 @@ export const deleteTask = async (req, res) => {
         })
     }
 }
+
+
+
+
+// Report 
+
+export const getDashboardReport = async (req, res) => {
+    try {
+        console.log("Entered Into Get Dashboard Report")
+
+        const userId = req.user._id;
+
+        const today = new Date();
+        const next7Days = new Date();
+        next7Days.setDate(today.getDate() + 7);
+
+        const report = await Task.aggregate([
+            {
+                // USER INVOLVEMENT MATCH
+                $match: {
+                    $or: [
+                        { createdBy: userId },
+                        { assignedTo: userId },
+                        { "sharedWith.user": userId }
+                    ]
+                }
+            },
+            {
+                // REMOVE DUPLICATES
+                $group: {
+                    _id: "$_id",
+                    status: { $first: "$status" },
+                    deadline: { $first: "$deadline" }
+                }
+            },
+            {
+                $facet: {
+                    totalTasks: [
+                        { $count: "count" }
+                    ],
+                    completedTasks: [
+                        { $match: { status: "completed" } },
+                        { $count: "count" }
+                    ],
+                    upcomingDeadlines: [
+                        {
+                            $match: {
+                                deadline: { $gte: today, $lte: next7Days },
+                                status: { $ne: "completed" }
+                            }
+                        },
+                        { $count: "count" }
+                    ]
+                }
+            }
+        ]);
+
+        const total = report[0].totalTasks[0]?.count || 0;
+        const completed = report[0].completedTasks[0]?.count || 0;
+        const upcoming = report[0].upcomingDeadlines[0]?.count || 0;
+
+        const progress = total === 0
+            ? 0
+            : Math.round((completed / total) * 100);
+
+        res.status(200).json({
+            success: true,
+            data: {
+                totalTasks: total,
+                completedTasks: completed,
+                upcomingDeadlines: upcoming,
+                progress
+            }
+        });
+
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: error.message
+        });
+    }
+};
