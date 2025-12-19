@@ -1,5 +1,6 @@
 import Task from "../Models/TaskModel.js";
 import User from "../Models/UserModel.js";
+import APIFeatures from "../Utils/ApiFeatures.js";
 
 
 
@@ -53,7 +54,7 @@ export const getAllTasks = async (req, res) => {
         //     // .populate("sharedWith.user", "name email")
         //     .sort({ deadline: 1 });
 
-        const tasks = await Task.aggregate([
+        const pipeline = [
             {
                 $match: {
                     createdBy: req.user._id
@@ -85,9 +86,9 @@ export const getAllTasks = async (req, res) => {
             },
             {
                 $sort: {
-                    statusOrder: 1,    // pending → in-progress → completed
-                    deadline: 1,       // nearest deadline first
-                    priorityOrder: 1   // high → medium → low
+                    statusOrder: 1,
+                    deadline: 1,
+                    priorityOrder: 1
                 }
             },
             {
@@ -113,8 +114,14 @@ export const getAllTasks = async (req, res) => {
                     preserveNullAndEmptyArrays: true
                 }
             }
-        ]);
+        ];
 
+        const features = new APIFeatures(pipeline, req.query)
+            .search(["title", "description"])
+            .filter()
+            .paginate(10);
+
+        const tasks = await Task.aggregate(features.pipeline);
 
         res.status(200).json({
             success: true,
