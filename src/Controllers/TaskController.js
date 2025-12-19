@@ -43,15 +43,78 @@ export const getAllTasks = async (req, res) => {
 
         console.log("Entered Into Get Tasks")
 
-        const tasks = await Task.find({
-            $or: [
-                { createdBy: req.user._id },
-            ]
-        })
-            .populate("createdBy", "name email")
-            .populate("assignedTo", "name email")
-            // .populate("sharedWith.user", "name email")
-            .sort({ deadline: 1 });
+        // const tasks = await Task.find({
+        //     $or: [
+        //         { createdBy: req.user._id },
+        //     ]
+        // })
+        //     .populate("createdBy", "name email")
+        //     .populate("assignedTo", "name email")
+        //     // .populate("sharedWith.user", "name email")
+        //     .sort({ deadline: 1 });
+
+        const tasks = await Task.aggregate([
+            {
+                $match: {
+                    createdBy: req.user._id
+                }
+            },
+            {
+                $addFields: {
+                    statusOrder: {
+                        $switch: {
+                            branches: [
+                                { case: { $eq: ["$status", "pending"] }, then: 1 },
+                                { case: { $eq: ["$status", "in-progress"] }, then: 2 },
+                                { case: { $eq: ["$status", "completed"] }, then: 3 }
+                            ],
+                            default: 4
+                        }
+                    },
+                    priorityOrder: {
+                        $switch: {
+                            branches: [
+                                { case: { $eq: ["$priority", "high"] }, then: 1 },
+                                { case: { $eq: ["$priority", "medium"] }, then: 2 },
+                                { case: { $eq: ["$priority", "low"] }, then: 3 }
+                            ],
+                            default: 4
+                        }
+                    }
+                }
+            },
+            {
+                $sort: {
+                    statusOrder: 1,    // pending → in-progress → completed
+                    deadline: 1,       // nearest deadline first
+                    priorityOrder: 1   // high → medium → low
+                }
+            },
+            {
+                $lookup: {
+                    from: "users",
+                    localField: "createdBy",
+                    foreignField: "_id",
+                    as: "createdBy"
+                }
+            },
+            { $unwind: "$createdBy" },
+            {
+                $lookup: {
+                    from: "users",
+                    localField: "assignedTo",
+                    foreignField: "_id",
+                    as: "assignedTo"
+                }
+            },
+            {
+                $unwind: {
+                    path: "$assignedTo",
+                    preserveNullAndEmptyArrays: true
+                }
+            }
+        ]);
+
 
         res.status(200).json({
             success: true,
