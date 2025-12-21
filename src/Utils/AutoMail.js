@@ -1,12 +1,14 @@
 import cron from "node-cron";
-import Task from "./models/Task.js";
-import sendMail from "./utils/sendMail.js";
+import Task from "../Models/TaskModel";
+import sendMail from "./SendMail";
 
 
 
 // Runs every hour
 cron.schedule("0 * * * *", async () => {
     try {
+        console.log("Entered Deadline Reminder...");
+
         const now = new Date();
 
         const tomorrowStart = new Date(now);
