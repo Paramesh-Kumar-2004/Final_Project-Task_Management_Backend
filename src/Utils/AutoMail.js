@@ -1,11 +1,11 @@
 import cron from "node-cron";
-import Task from "../Models/TaskModel";
-import sendMail from "./SendMail";
+import Task from "../Models/TaskModel.js";
+import sendMail from "./SendMail.js";
 
 
 
 // Runs every hour
-cron.schedule("0 * * * *", async () => {
+cron.schedule("*/5 * * * *", async () => {
     try {
         console.log("Entered Deadline Reminder...");
 
@@ -24,10 +24,11 @@ cron.schedule("0 * * * *", async () => {
                 $lte: tomorrowEnd
             },
             reminderSent: false
-        });
+        }).populate("createdBy");
 
         for (const task of tasks) {
-            const to = task.assignedTo.email;
+            console.log(task)
+            const to = task.email;
             const subject = "Task Deadline Reminder";
             const text = `Reminder: Your task "${task.title}" is due tomorrow.`;
 
