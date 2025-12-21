@@ -5,23 +5,24 @@ dotenv.config();
 
 
 const transporter = nodemailer.createTransport({
-    service: 'Gmail',
+    service: 'gmail',
+    host: "smtp.gmail.com",
     auth: {
-        user: process.env.EMAIL_USER,
+        user: process.env.USER_EMAIL,
         pass: process.env.EMAIL_PASS,
     },
 });
 
 const sendMail = async (to, subject, text) => {
     const mailOptions = {
-        from: process.env.EMAIL_USER,
+        from: process.env.USER_EMAIL,
         to,
         subject,
         text,
     };
     try {
-        return await transporter.sendMail(mailOptions)
-            .then(() => console.log("MAIL SENT"))
+        await transporter.sendMail(mailOptions)
+            .then(() => console.log("MAIL SENT TO :", mailOptions.to))
             .catch(err => console.log("MAIL ERROR:", err));
     } catch (error) {
         console.log(error);

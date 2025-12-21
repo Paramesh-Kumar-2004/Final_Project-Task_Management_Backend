@@ -2,8 +2,9 @@ import express from "express"
 import dotenv from "dotenv"
 import cors from "cors"
 import cookieParser from "cookie-parser"
-import { ConnectDB } from "./src/DbConfig/ConnectDB.js"
 
+import "./src/Utils/AutoMail.js"  // Scheduler For Sending Deadline Reminders
+import { ConnectDB } from "./src/DbConfig/ConnectDB.js"
 import AuthRoutes from "./src/Routes/UserRoutes.js"
 import TaskRoutes from "./src/Routes/TaskRoutes.js"
 import CommentsRoutes from "./src/Routes/CommentsRoutes.js"
