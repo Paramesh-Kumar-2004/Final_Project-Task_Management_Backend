@@ -5,7 +5,7 @@ import sendMail from "./SendMail.js";
 
 
 // Runs every hour
-cron.schedule("*/5 * * * *", async () => {
+cron.schedule("0 0 * * * ", async () => {
     try {
         console.log("Entered Deadline Reminder...");
 
@@ -27,11 +27,9 @@ cron.schedule("*/5 * * * *", async () => {
         }).populate("createdBy");
 
         for (const task of tasks) {
-            console.log(task)
-            const to = task.email;
+            const to = task.createdBy.email;
             const subject = "Task Deadline Reminder";
             const text = `Reminder: Your task "${task.title}" is due tomorrow.`;
-            console.log(task)
 
             await sendMail(to, subject, text);
 
