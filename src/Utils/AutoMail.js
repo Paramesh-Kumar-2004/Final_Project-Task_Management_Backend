@@ -31,6 +31,7 @@ cron.schedule("*/5 * * * *", async () => {
             const to = task.email;
             const subject = "Task Deadline Reminder";
             const text = `Reminder: Your task "${task.title}" is due tomorrow.`;
+            console.log(task)
 
             await sendMail(to, subject, text);
 
