@@ -13,6 +13,8 @@ import CommentsRoutes from "./src/Routes/CommentsRoutes.js"
 const app = express()
 dotenv.config()
 
+// DB Connection
+ConnectDB()
 
 // Middlewares
 app.use("/public", express.static("public"))
@@ -23,8 +25,6 @@ app.use(cors({
 app.use(express.json())
 app.use(cookieParser())
 
-// DB Connection
-ConnectDB()
 
 // APIs / Routes
 app.use("/api/v1/auth", AuthRoutes)
