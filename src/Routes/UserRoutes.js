@@ -6,7 +6,7 @@ import {
     LoginUser,
     RegisterUser,
     ResetPassword,
-} from "../Controllers/userController.js"
+} from "../Controllers/UserController.js"
 import { Authentication, Authorization } from "../Middlewares/AuthMiddleware.js"
 
 

@@ -17,7 +17,7 @@ dotenv.config()
 // Middlewares
 app.use("/public", express.static("public"))
 app.use(cors({
-    origin: "http://localhost:5173",
+    origin: ["http://localhost:5173", process.env.FRONTEND_URL],
     credentials: true
 }))
 app.use(express.json())
