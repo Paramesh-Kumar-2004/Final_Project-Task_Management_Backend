@@ -14,14 +14,13 @@ export const Authentication = async (req, res, next) => {
         }
 
         const token = authHeader.split(" ")[1];
-        const decoded = jwtVerify(token);
+        const decoded = await jwtVerify(token);
 
-        const user = await User.findById(decoded.id).select("-password");
-        req.user = user
+        const user = await User.findById(decoded._id).select("-password");
 
-        if (!req.user) {
+        if (!user) {
             return res.status(401).json({
-                message: "User no longer exists, Login And Try Again"
+                message: "User no longer exists"
             });
         }
 
@@ -30,7 +29,7 @@ export const Authentication = async (req, res, next) => {
     } catch (error) {
         console.log(error)
         res.status(401).json({
-            message: "Not authorized, token invalid"
+            message: "Not authorized, token invalid , Login And Try Again"
         })
     }
 }
