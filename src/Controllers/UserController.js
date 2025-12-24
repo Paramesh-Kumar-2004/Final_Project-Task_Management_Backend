@@ -77,14 +77,12 @@ export const LoginUser = async (req, res) => {
         const token = await jwtSign(user._id)
 
         if (verifyPassword) {
-            res.status(200)
-                .cookie("token", token, cookieOptions)
-                .json({
-                    message: "User Login Successfully",
-                    isAuth: true,
-                    token,
-                    user
-                })
+            res.status(200).json({
+                message: "User Login Successfully",
+                isAuth: true,
+                token,
+                user
+            })
         }
 
     } catch (error) {

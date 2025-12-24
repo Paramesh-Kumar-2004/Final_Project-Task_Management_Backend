@@ -5,36 +5,32 @@ import { jwtVerify } from "../Utils/JWT.js";
 export const Authentication = async (req, res, next) => {
     try {
 
-        const { token } = req.cookies;
-        const decode = await jwtVerify(token);
+        const authHeader = req.headers.authorization;
 
-        if (!token) {
-            return res.status(404).json({
-                success:false,
-                message: "Login And Try Again"
-            })
-        }
-
-        if (!decode) {
+        if (!authHeader || !authHeader.startsWith("Bearer ")) {
             return res.status(401).json({
-                message: "Unauthorized User : Login And Try Again"
+                message: "Not authorized, token missing"
             });
         }
 
-        const user = await User.findById(decode._id);
-        if (!user) {
-            return res.status(404).json({
-                message: "User Not Found"
-            });
-        }
+        const token = authHeader.split(" ")[1];
+        const decoded = jwtVerify(token);
 
+        const user = await User.findById(decoded.id).select("-password");
         req.user = user
-        next()
+
+        if (!req.user) {
+            return res.status(401).json({
+                message: "User no longer exists, Login And Try Again"
+            });
+        }
+
+        next();
 
     } catch (error) {
         console.log(error)
-        res.status(500).json({
-            message: "Intenal Server Error"
+        res.status(401).json({
+            message: "Not authorized, token invalid"
         })
     }
 }
