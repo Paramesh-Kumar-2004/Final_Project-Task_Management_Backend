@@ -366,17 +366,15 @@ export const getDashboardReport = async (req, res) => {
             ? 0
             : Math.round((completed / total) * 100);
 
-        setTimeout(() => {
-            res.status(200).json({
-                success: true,
-                data: {
-                    totalTasks: total,
-                    completedTasks: completed,
-                    upcomingDeadlines: upcoming,
-                    progress
-                }
-            });
-        }, 500)
+        res.status(200).json({
+            success: true,
+            data: {
+                totalTasks: total,
+                completedTasks: completed,
+                upcomingDeadlines: upcoming,
+                progress
+            }
+        });
 
     } catch (error) {
         res.status(500).json({
