@@ -5,7 +5,7 @@ import sendMail from "./SendMail.js";
 
 
 // Runs every hour
-cron.schedule("0 0 * * * ", async () => {
+cron.schedule("30 1 * * * ", async () => {
     try {
         console.log("Entered Deadline Reminder...");
 
@@ -19,22 +19,43 @@ cron.schedule("0 0 * * * ", async () => {
         tomorrowEnd.setHours(23, 59, 59, 999);
 
         const tasks = await Task.find({
-            deadline: {
-                $gte: tomorrowStart,
-                $lte: tomorrowEnd
-            },
-            reminderSent: false
+            $or: [
+                {
+                    deadline: {
+                        $gte: tomorrowStart,
+                        $lte: tomorrowEnd
+                    }
+                },
+                {
+                    deadline: { $lt: now }
+                }
+            ],
+            status: { $ne: "Completed" },
         }).populate("createdBy");
+
 
         for (const task of tasks) {
             const to = task.createdBy.email;
-            const subject = "Task Deadline Reminder";
-            const text = `Reminder: Your task "${task.title}" is due tomorrow.`;
 
-            await sendMail(to, subject, text);
+            if (task.deadline < now) {
+                const subject = "Task Deadline Reminder";
+                const text = `Reminder: Your task "${task.title}" is due tomorrow.`;
 
-            task.reminderSent = true;
-            await task.save();
+                await sendMail(to, subject, text);
+                await task.save();
+            } else {
+                const subject = "Task Overdue Notification";
+                const text = `⚠️ Task Overdue Alert
+                The task "${task.title}" has passed its deadline and is currently overdue.
+                Please take immediate action to complete or update the task status.
+                Deadline: ${new Date(task.deadline).toLocaleDateString()}
+                If this task has already been completed, kindly update the status to avoid further reminders.`;
+
+                await sendMail(to, subject, text);
+
+                task.reminderSent = true;
+                await task.save();
+            }
         }
 
         console.log(`Reminder job executed. Mails sent: ${tasks.length}`);
