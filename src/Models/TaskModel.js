@@ -15,7 +15,7 @@ const taskSchema = mongoose.Schema({
     },
     category: {
         type: String,
-        enum: ["work", "personal", "prjects"],
+        enum: ["work", "personal", "projects"],
         default: "personal",
         lowercase: true
     },
