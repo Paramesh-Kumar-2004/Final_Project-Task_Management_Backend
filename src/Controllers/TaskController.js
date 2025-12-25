@@ -11,7 +11,8 @@ export const createTask = async (req, res) => {
 
         let fileUrl = null
         if (req.file) {
-            fileUrl = `${req.protocol}://${req.get("host")}/${req.file.path.replace(/\\/g, "/")}`;
+            // fileUrl = `${req.protocol}://${req.get("host")}/${req.file.path.replace(/\\/g, "/")}`;
+            fileUrl = req.file.path
         }
 
         const newTask = new Task({
