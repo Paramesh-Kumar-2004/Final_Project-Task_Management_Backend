@@ -1,7 +1,7 @@
 import bcrypt from "bcrypt"
 import User from "../Models/UserModel.js"
 import { jwtSign, jwtVerify } from "../Utils/JWT.js";
-import sendMail from "../Utils/SendMail.js";
+import sendEmail from "../Utils/sendMail.js";
 
 
 
@@ -141,7 +141,7 @@ export const ForgotPassword = async (req, res) => {
         user.passwordResetToken = passwordRestToken;
         await user.save()
 
-        await sendMail(
+        await sendEmail(
             user.email,
             "Password Reset Link",
             `${process.env.FRONTEND_URL}/PasswordReset/#/resetpassword/${user._id}/${passwordRestToken}`
@@ -193,7 +193,7 @@ export const ResetPassword = async (req, res) => {
         user.passwordResetToken = undefined;
         await user.save();
 
-        sendMail(
+        sendEmail(
             user.email,
             "Password Reset Successfully",
             `Your Password Has Been Reset Successfully`

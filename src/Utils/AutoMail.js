@@ -1,6 +1,6 @@
 import cron from "node-cron";
 import Task from "../Models/TaskModel.js";
-import sendMail from "./SendMail.js";
+import sendEmail from "./SendMail.js";
 
 
 
@@ -41,7 +41,7 @@ cron.schedule("45 10 * * *", async () => {
                 const subject = "Task Deadline Reminder";
                 const text = `Reminder: Your task "${task.title}" is due tomorrow.`;
 
-                await sendMail(to, subject, text);
+                await sendEmail(to, subject, text);
                 await task.save();
             } else {
                 const subject = "Task Overdue Notification";
