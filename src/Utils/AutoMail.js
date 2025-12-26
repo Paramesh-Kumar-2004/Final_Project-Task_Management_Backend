@@ -5,7 +5,7 @@ import sendEmail from "./SendMail.js";
 
 
 // Runs every hour
-cron.schedule("45 10 * * *", async () => {
+cron.schedule("2 13 * * *", async () => {
     try {
         console.log("Entered Deadline Reminder...");
 
