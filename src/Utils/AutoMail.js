@@ -37,7 +37,7 @@ cron.schedule("45 10 * * * ", async () => {
         for (const task of tasks) {
             const to = task.createdBy.email;
 
-            if (task.deadline < now) {
+            if (task.deadline > now) {
                 const subject = "Task Deadline Reminder";
                 const text = `Reminder: Your task "${task.title}" is due tomorrow.`;
 
