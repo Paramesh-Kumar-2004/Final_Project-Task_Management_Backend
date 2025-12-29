@@ -1,10 +1,12 @@
+import { ConnectDB } from "../src/DbConfig/ConnectDB.js";
 import { runDeadlineReminder } from "../src/Utils/AutoMail.js";
-import "../src/DbConfig/ConnectDB.js"
+
 
 
 
 export default async function handler(req, res) {
   try {
+    await ConnectDB();
     await runDeadlineReminder();
     res.status(200).json({ success: true });
   } catch (error) {
