@@ -1,5 +1,5 @@
-import { runDeadlineReminder } from "../Utils/AutoMail.js";
-import "../DbConfig/ConnectDB.js"
+import { runDeadlineReminder } from "../src/Utils/AutoMail.js";
+import "../src/DbConfig/ConnectDB.js"
 
 
 

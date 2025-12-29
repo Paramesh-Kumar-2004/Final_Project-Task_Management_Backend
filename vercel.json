@@ -1,8 +1,11 @@
+
+
+
 {
   "crons": [
     {
       "path": "/api/deadlineReminder",
-      "schedule": "39 13 * * *"
+      "schedule": "50 13 * * *"
     }
   ]
 }
