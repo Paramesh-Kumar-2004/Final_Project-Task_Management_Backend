@@ -4,8 +4,8 @@ import sendEmail from "./SendMail.js";
 
 
 
-// Runs every hour
-cron.schedule("10 13 * * *", async () => {
+// AutoMail
+cron.schedule("30 11 * * *", async () => {
     try {
         console.log("Entered Deadline Reminder...");
 
@@ -51,7 +51,7 @@ cron.schedule("10 13 * * *", async () => {
                 Deadline: ${new Date(task.deadline).toLocaleDateString()}
                 If this task has already been completed, kindly update the status to avoid further reminders.`;
 
-                await sendMail(to, subject, text);
+                await sendEmail(to, subject, text);
 
                 task.reminderSent = true;
                 await task.save();
