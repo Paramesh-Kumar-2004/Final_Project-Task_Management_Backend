@@ -3,7 +3,7 @@ import dotenv from "dotenv"
 import cors from "cors"
 import cookieParser from "cookie-parser"
 
-import "./src/Utils/AutoMail.js"  // Scheduler For Sending Deadline Reminders
+// import "./src/Utils/AutoMail.js"  // Scheduler For Sending Deadline Reminders
 import { ConnectDB } from "./src/DbConfig/ConnectDB.js"
 import AuthRoutes from "./src/Routes/UserRoutes.js"
 import TaskRoutes from "./src/Routes/TaskRoutes.js"

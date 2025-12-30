@@ -1,11 +1,13 @@
 import Task from "../Models/TaskModel.js";
 import User from "../Models/UserModel.js";
 import APIFeatures from "../Utils/ApiFeatures.js";
+import sendEmail from "../Utils/SendMail.js";
 
 
 
 export const createTask = async (req, res) => {
     try {
+        console.log("Entered Create Task")
 
         const { title, description, category, priority, deadline, assignedTo } = req.body;
 
@@ -27,6 +29,11 @@ export const createTask = async (req, res) => {
         });
         const task = new Task(newTask);
         await task.save();
+
+        if (assignedTo) {
+            const user = await User.findById(assignedTo)
+            await sendEmail(user.email, "Task Assign", `The Task ${title} Was Assigned To You, Kindly Complete It Before Deadline`)
+        }
 
         res.status(201).json({
             success: true,
@@ -179,6 +186,10 @@ export const updateTask = async (req, res) => {
 
         const { id } = req.params;
         const { taskData } = req.body;
+
+        if (taskData.status == "completed") {
+            sendEmail(taskData.createdBy?.email, "Task Completed", `The Task "${taskData.title}" has been completed successfully.`)
+        }
 
         const updateTask = await Task.findByIdAndUpdate(
             id,
