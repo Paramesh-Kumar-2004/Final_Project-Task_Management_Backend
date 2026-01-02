@@ -8,6 +8,7 @@ import {
     getSingleTask,
     shareTask,
     updateTask,
+    removeSharedUser,
 } from "../Controllers/TaskController.js"
 import { Authentication } from "../Middlewares/AuthMiddleware.js"
 import upload from "../Middlewares/MulterMiddleware.js"
@@ -23,6 +24,7 @@ router.put("/updatetask/:id", Authentication, updateTask)
 router.delete("/deletetask/:id", Authentication, deleteTask)
 router.put("/sharetask/:taskid", Authentication, shareTask)
 router.get("/dashboard/getreport", Authentication, getDashboardReport)
+router.delete("/removeshareduser/:taskId/:userId", Authentication, removeSharedUser)
 
 
 export default router

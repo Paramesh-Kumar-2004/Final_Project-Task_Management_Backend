@@ -8,9 +8,6 @@ const storage = new CloudinaryStorage({
     cloudinary: cloudinary,
     params: {
         folder: "uploads",
-        public_id: (req, file) => {
-            return Date.now() + "-" + file.originalname;
-        }
     }
 });
 
