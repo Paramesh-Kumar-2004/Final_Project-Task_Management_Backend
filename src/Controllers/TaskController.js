@@ -30,9 +30,11 @@ export const createTask = async (req, res) => {
         const task = new Task(newTask);
         await task.save();
 
+        await sendEmail(req.user.email, "Task Created", `The Task "${title}" Was Created, Kindly Complete It Before Deadline`)
+
         if (assignedTo) {
             const user = await User.findById(assignedTo)
-            await sendEmail(user.email, "Task Assign", `The Task ${title} Was Assigned To You, Kindly Complete It Before Deadline`)
+            await sendEmail(user.email, "Task Assign", `The Task : "${title}" Was Assigned To You, Kindly Complete It Before Deadline`)
         }
 
         res.status(201).json({
@@ -188,7 +190,7 @@ export const updateTask = async (req, res) => {
         const { taskData } = req.body;
 
         if (taskData.status == "completed") {
-            sendEmail(taskData.createdBy?.email, "Task Completed", `The Task "${taskData.title}" has been completed successfully.`)
+            sendEmail(taskData.createdBy.email, "Task Completed", `The Task "${taskData.title}" has been completed successfully.`)
         }
 
         const updateTask = await Task.findByIdAndUpdate(
