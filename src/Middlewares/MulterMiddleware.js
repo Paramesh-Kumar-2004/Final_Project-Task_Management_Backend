@@ -7,6 +7,7 @@ import cloudinary from "./CloudinaryConfig.js";
 const storage = new CloudinaryStorage({
     cloudinary: cloudinary,
     params: {
+        resource_type: "auto",   // auto-detect image, pdf, doc, xls, etc...
         folder: "uploads",
     }
 });

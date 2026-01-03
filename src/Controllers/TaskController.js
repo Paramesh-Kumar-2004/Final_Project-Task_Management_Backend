@@ -14,9 +14,9 @@ export const createTask = async (req, res) => {
         let fileUrl = null
         if (req.file) {
             // fileUrl = `${req.protocol}://${req.get("host")}/${req.file.path.replace(/\\/g, "/")}`;
-            fileUrl = req.file.path
+            fileUrl = req.file.url
         }
-
+        // console.log(req.file)
         const newTask = new Task({
             title,
             description,
@@ -24,7 +24,7 @@ export const createTask = async (req, res) => {
             category,
             deadline,
             assignedTo,
-            fileUrl,
+            fileUrl,    
             createdBy: req.user._id
         });
         const task = new Task(newTask);
