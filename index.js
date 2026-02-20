@@ -19,8 +19,8 @@ ConnectDB()
 // Middlewares
 app.use("/public", express.static("public"))
 app.use(cors({
-    origin: ["http://localhost:5173", process.env.FRONTEND_URL],
-    credentials: true
+     origin: "https://final-project-task-management-frontend-ddsyxqes5.vercel.app",
+    credentials: true,
 }))
 app.use(express.json())
 app.use(cookieParser())
